@@ -1,4 +1,5 @@
-#LOG ANALYSIS
+LOG ANALYSIS
+============
 
 Log analysis uses 3 processors:
 
@@ -11,14 +12,16 @@ Log analysis uses 3 processors:
 >
 > 1. Storage Complete Processor: store into the database all events using batch insertions.
 
-##Stack
+Stack
+=====
 * We will use spring boot and spring-jdbc
 * Flyway was added just to show something else but it was not necessary to be honest
 * JDBCPool from HSQLDB (it is better than nothing)
 * JCommander to easily parser command lines
 * JUnit and Mockito for tests, and EnhancedRandomBeans (currently Easy-Random)
 
-##Build and Run
+Build and Run
+=============
 First of all, run `gradle bootjar` to build the project and the java executable will stay on `launcher-app/bin/libs/`, after that you could run teh application with 
 ```
 java -jar launcher-app/build/libs/launcher-app-1.0-SNAPSHOT.jar -f PATH-LOG-FILE.txt
@@ -33,7 +36,8 @@ and if you want to "hide" all debug messages just add `no-debug` on active profi
 java -Dspring.profiles.active=stdout,no-debug -jar launcher-app/build/libs/launcher-app-1.0-SNAPSHOT.jar -f PATH-LOG-FILE.txt
 ```
 
-##Thoughts
+Thoughts
+========
 * we could use Guice or Dagger2 as dependency injection frameworks as well but Spring sounds more relevant 
 * no sure if the entry state (STARTED or FINISHED) should follow the timestamp
 * the biggest problem for large files still when we have to insert on database, probably the best way should use batch insertions
@@ -47,7 +51,8 @@ java -Dspring.profiles.active=stdout,no-debug -jar launcher-app/build/libs/launc
     * state doesn't fit with STARTED and FINISHED
 * tests should be improved
  
-##Job Diary
+Job Diary
+=========
 1. start project with git init and gradle init
 1. creation of `.gitignore` (i just copy from another project)
 1. build directories: `mkdir {core-domain,core-service,dbc-adapter,dbc-persistence,port-controller,port-persistence}/src/{main,test}/{java,resources}`
