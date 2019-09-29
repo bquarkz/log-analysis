@@ -1,6 +1,7 @@
 package com.niltonrc.loganalysis.configuration;
 
-import org.hsqldb.jdbc.JDBCDataSource;
+import com.niltonrc.loganalysis.utils.LogPrinter;
+import org.hsqldb.jdbc.JDBCPool;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,14 +24,14 @@ public class DataSourceConfiguration
     }
 
     @Bean
-    DataSource getDataSource( final DatabaseResource dbResource )
+    DataSource getDataSource( final LogPrinter logPrinter, final DatabaseResource dbResource )
     {
-
-        final JDBCDataSource dataSource = new JDBCDataSource();
-        dataSource.setUrl( dbResource.getUrl() );
-        dataSource.setUser( dbResource.getUsername() );
-        dataSource.setPassword( dbResource.getPassword() );
-        return dataSource;
+        logPrinter.print( LoggerFactory.getLogger( DataSourceConfiguration.class ), "Building database..." );
+        final JDBCPool pool = new JDBCPool();
+        pool.setUrl( dbResource.getUrl() );
+        pool.setUser( dbResource.getUsername() );
+        pool.setPassword( dbResource.getPassword() );
+        return pool;
     }
 
     @Bean
@@ -41,10 +41,7 @@ public class DataSourceConfiguration
             try( final Connection c = DriverManager
                     .getConnection( dbResource.getUrl(), dbResource.getUsername(), dbResource.getPassword() ) )
             {
-                if( !dbResource.isInMemory() && !new File( dbResource.getLocal() ).exists() )
-                {
-                    LoggerFactory.getLogger( DataSourceConfiguration.class ).info( "created new database using: " + dbResource );
-                }
+                LoggerFactory.getLogger( DataSourceConfiguration.class ).info( "database: " + dbResource );
             }
             catch( SQLException e )
             {
@@ -65,8 +62,6 @@ public class DataSourceConfiguration
         private final String url;
         private final String username;
         private final String password;
-        private final String local;
-        private final boolean inMemory;
 
         private DatabaseResource(
                 String driver,
@@ -78,8 +73,6 @@ public class DataSourceConfiguration
             this.url = url;
             this.username = username;
             this.password = password;
-            this.local = url.substring( url.indexOf( "jdbc:hsqldb:file:" ) );
-            this.inMemory = url.startsWith( "jdbc:hsqldb:mem:" );
         }
 
         public static DatabaseResource inMemory()
@@ -93,7 +86,7 @@ public class DataSourceConfiguration
         public static DatabaseResource local( String local )
         {
             return new DatabaseResource( "org.hsqldb.jdbc.JDBCDriver",
-                    "jdbc:hsqldb:file:" + local,
+                    "jdbc:hsqldb:file:" + local + ";create=true;shutdown=true;",
                     "sa",
                     "" );
         }
@@ -116,16 +109,6 @@ public class DataSourceConfiguration
         public String getPassword()
         {
             return password;
-        }
-
-        public String getLocal()
-        {
-            return local;
-        }
-
-        public boolean isInMemory()
-        {
-            return inMemory;
         }
 
         @Override

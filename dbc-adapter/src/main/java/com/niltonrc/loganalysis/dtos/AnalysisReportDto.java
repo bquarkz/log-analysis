@@ -15,7 +15,7 @@ public class AnalysisReportDto
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private final long processingTimeInSecs;
     private final long numberOfSuccessfulLogs;
-    private final long numberOfProblemsEntry;
+    private final long numberOfEntryProblems;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -23,11 +23,11 @@ public class AnalysisReportDto
     public AnalysisReportDto(
             long processingTimeInSecs,
             long numberOfSuccessfulLogs,
-            long numberOfProblemsEntry )
+            long numberOfEntryProblems )
     {
         this.processingTimeInSecs = processingTimeInSecs;
         this.numberOfSuccessfulLogs = numberOfSuccessfulLogs;
-        this.numberOfProblemsEntry = numberOfProblemsEntry;
+        this.numberOfEntryProblems = numberOfEntryProblems;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,9 +48,9 @@ public class AnalysisReportDto
         return numberOfSuccessfulLogs;
     }
 
-    public long getNumberOfProblemsEntry()
+    public long getNumberOfEntryProblems()
     {
-        return numberOfProblemsEntry;
+        return numberOfEntryProblems;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ public class AnalysisReportDto
         return "REPORT{" +
                 "processingTime=" + processingTimeInSecs + "s" +
                 ", numberOfSuccessfulLogs=" + numberOfSuccessfulLogs +
-                ", numberOfProblemsEntry=" + numberOfProblemsEntry +
+                ", numberOfEntryProblems=" + numberOfEntryProblems +
                 '}';
     }
 

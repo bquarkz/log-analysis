@@ -1,5 +1,6 @@
 rootProject.name = 'log-analysis'
 
+include 'infrastructure'
 include 'core-domain'
 include 'core-service'
 include 'dbc-adapter'

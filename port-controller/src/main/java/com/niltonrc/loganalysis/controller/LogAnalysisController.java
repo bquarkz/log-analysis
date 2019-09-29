@@ -6,6 +6,7 @@ import com.niltonrc.loganalysis.contract.IEventService;
 import com.niltonrc.loganalysis.exceptions.ServiceException;
 import com.niltonrc.loganalysis.messages.EventAnalysisRequest;
 import com.niltonrc.loganalysis.messages.EventAnalysisResponse;
+import com.niltonrc.loganalysis.utils.LogPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class LogAnalysisController
     // Special Fields And Injections
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private final IEventService eventService;
+    private final LogPrinter logPrinter;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Fields
@@ -33,9 +35,15 @@ public class LogAnalysisController
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructors
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Autowired
     protected LogAnalysisController( IEventService eventService )
     {
+        this( new LogPrinter(), eventService );
+    }
+
+    @Autowired
+    protected LogAnalysisController( LogPrinter logPrinter, IEventService eventService )
+    {
+        this.logPrinter = logPrinter;
         this.eventService = eventService;
     }
 
@@ -63,12 +71,21 @@ public class LogAnalysisController
             try
             {
                 commandParser.parse( arguments.getSourceArgs() );
+                logPrinter.print( getLogger(), "Running..." );
                 final EventAnalysisResponse response = eventService.doAnalysis( buildRequest( logAnalysisArguments ) );
                 getLogger().info( "RESPONSE: " + response );
+                if( response.getReport().isPresent() )
+                {
+                    logPrinter.print( getLogger(), response.getReport().get().toString() );
+                }
+                else
+                {
+                    logPrinter.print( getLogger(), "something bad happens please check logs" );
+                }
             }
             catch( ParameterException ex )
             {
-                System.out.println( "command wrong, please follow a short help for it:" );
+                logPrinter.print( getLogger(), "command wrong, please follow a short help for it:" );
                 commandParser.usage();
             }
             catch( ServiceException ex )
@@ -79,14 +96,14 @@ public class LogAnalysisController
             {
                 getLogger().error( "error from outer space -- really?", ex );
             }
-            finally
-            {
-                System.exit( 0 );
-            }
+//            finally
+//            {
+//                System.exit( 0 );
+//            }
         };
     }
 
-    public EventAnalysisRequest buildRequest( LogAnalysisArguments args )
+    private EventAnalysisRequest buildRequest( LogAnalysisArguments args )
     {
         return new EventAnalysisRequest(
                 args.getFilename(),

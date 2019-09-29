@@ -1,10 +1,16 @@
-package com.niltonrc.loganalysis.messages;
+package com.niltonrc.loganalysis.utils;
 
-import com.niltonrc.loganalysis.dtos.AnalysisReportDto;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class EventAnalysisResponse
+@Component
+public class LogPrinter
 {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constants
@@ -17,21 +23,20 @@ public class EventAnalysisResponse
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Fields
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private final boolean isOk;
-    private final AnalysisReportDto report;
+    private final Environment environment;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructors
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public EventAnalysisResponse()
+    public LogPrinter()
     {
-        this( false, null );
+        this( null );
     }
 
-    public EventAnalysisResponse( boolean isOk, AnalysisReportDto report )
+    @Autowired
+    public LogPrinter( Environment environment )
     {
-        this.isOk = isOk;
-        this.report = report;
+        this.environment = environment;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,29 +47,31 @@ public class EventAnalysisResponse
     // Getters And Setters
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public boolean isOk()
-    {
-        return isOk;
-    }
-
-    public Optional< AnalysisReportDto > getReport()
-    {
-        return !isOk() ? Optional.empty() : Optional.ofNullable( report );
-    }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Methods
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public String toString()
+    public void print( Logger logger, String content )
     {
-        return "EventAnalysisResponse{" +
-                "isOk=" + isOk +
-                ", report=" + report +
-                '}';
+        print( logger, System.out, content );
     }
 
+    public void print( Logger logger, PrintStream out, String content )
+    {
+        if( environment == null ) return;
+
+        boolean stdout = Arrays
+                .stream( environment.getActiveProfiles() )
+                .anyMatch( s -> s.equals( "stdout" ) );
+
+        if( stdout )
+        {
+            logger.info( content );
+        }
+        else
+        {
+            out.println( content );
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Inner Classes And Patterns

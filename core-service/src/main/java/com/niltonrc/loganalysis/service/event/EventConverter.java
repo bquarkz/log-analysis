@@ -53,7 +53,8 @@ public class EventConverter
     private boolean validation( LogEntryDto logEntryDto )
     {
         if( logEntryDto == null ) return false;
-        if( logEntryDto.getId() == null ) return false;
+        if( StringUtils.isEmpty( logEntryDto.getId() ) ) return false;
+        if( logEntryDto.getTimestamp() == null || logEntryDto.getTimestamp() <= 0L ) return false;
         if( !EntryState.exist( logEntryDto.getState() ) ) return false;
         return true;
     }

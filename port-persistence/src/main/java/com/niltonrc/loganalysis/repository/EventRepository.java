@@ -4,6 +4,7 @@ import com.niltonrc.loganalysis.constants.DBConstants;
 import com.niltonrc.loganalysis.contract.IEventRepository;
 import com.niltonrc.loganalysis.entities.event.EventEntity;
 import com.niltonrc.loganalysis.utils.DBUtils;
+import com.niltonrc.loganalysis.utils.LogPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,9 @@ public class EventRepository
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Special Fields And Injections
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private final LogPrinter logPrinter;
     private final DataSource dataSource;
+    private final DBUtils dbUtils;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Fields
@@ -36,9 +39,11 @@ public class EventRepository
     // Constructors
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Autowired
-    protected EventRepository( DataSource dataSource )
+    protected EventRepository( LogPrinter logPrinter, DataSource dataSource, DBUtils dbUtils )
     {
+        this.logPrinter = logPrinter;
         this.dataSource = dataSource;
+        this.dbUtils = dbUtils;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,9 +80,10 @@ public class EventRepository
     public long batchInsert( List< EventEntity > events )
     {
         final String sql = " INSERT INTO DBO.EVENTS ( id, alert, duration, type, host ) "
-                + " VALUES ( " + DBUtils.prepareQuestionMarks( 5 ) + " ); "
+                + " VALUES ( " + dbUtils.prepareQuestionMarks( 5 ) + " ); "
                 ;
-        return DBUtils.doBatch( getLogger(), dataSource,
+        getLogger().info( "inserting: " + events.size() );
+        return dbUtils.doBatch( getLogger(), dataSource,
                 sql, DBConstants.DB_BATCH_SIZE, events,
                 this::eventEntityPeek, this::eventEntityMapper );
     }

@@ -1,9 +1,12 @@
 dependencies {
     compile project( ':dbc-persistence' )
+    compile project( ':infrastructure' )
 
     compile group: 'org.flywaydb', name: 'flyway-core', version: version__FlyWay
-    compile group: 'com.zaxxer', name: 'HikariCP', version: version_HikariCP
+//    compile group: 'com.zaxxer', name: 'HikariCP', version: version__HikariCP
     compile group: 'org.hsqldb', name: 'hsqldb', version: version__HSQLDB
     compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: version__SpringBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: version__SpringBoot
+
+    testCompile group: 'org.mockito', name: 'mockito-core', version: version__MockitoCore
 }

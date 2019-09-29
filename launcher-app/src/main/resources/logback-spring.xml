@@ -33,7 +33,7 @@
 	<logger name="org.hsqldb" level = "ERROR" />
 	<logger name="hsqldb" level = "ERROR" />
 
-	<springProfile name="!only-info">
+	<springProfile name="!no-debug">
 		<root level="DEBUG">
 			<appender-ref ref="SAVE-TO-FILE" />
 
@@ -43,7 +43,7 @@
 		</root>
 	</springProfile>
 
-	<springProfile name="only-info">
+	<springProfile name="no-debug">
 		<root level="INFO">
 			<appender-ref ref="SAVE-TO-FILE" />
 

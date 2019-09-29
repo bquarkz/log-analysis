@@ -13,7 +13,7 @@ ext {
     version__LogbackClassic = '1.2.3'
     version__JCLOverSLF4J = '1.7.26'
     version__ApacheCommonsLang3 = '3.9'
-    version_HikariCP = '3.3.1'
+//    version__HikariCP = '3.3.1'
     version__RandomBeans = '3.9.0'
 }
 

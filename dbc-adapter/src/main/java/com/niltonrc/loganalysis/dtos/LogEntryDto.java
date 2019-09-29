@@ -28,7 +28,7 @@ public class LogEntryDto
     @JsonProperty( "host" )
     private String host;
     @JsonProperty( "timestamp" )
-    private long timestamp;
+    private Long timestamp;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -42,7 +42,7 @@ public class LogEntryDto
             String state,
             String type,
             String host,
-            long timestamp )
+            Long timestamp )
     {
         this.id = id;
         this.state = state;
@@ -99,12 +99,12 @@ public class LogEntryDto
         this.host = host;
     }
 
-    public long getTimestamp()
+    public Long getTimestamp()
     {
         return timestamp;
     }
 
-    public void setTimestamp( long timestamp )
+    public void setTimestamp( Long timestamp )
     {
         this.timestamp = timestamp;
     }

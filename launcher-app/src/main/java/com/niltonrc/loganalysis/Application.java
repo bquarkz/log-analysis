@@ -4,6 +4,7 @@ import com.niltonrc.loganalysis.controller.LogAnalysisController;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -38,7 +39,10 @@ public class Application
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void main( String... args )
     {
-        SpringApplication.run( Application.class, args );
+        System.out.println( "LOG-ANALYSIS" );
+        System.out.println( "============" );
+        ConfigurableApplicationContext context = SpringApplication.run( Application.class, args );
+        System.exit( SpringApplication.exit( context, () -> 0 ) );
     }
 
     @Bean
