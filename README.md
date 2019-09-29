@@ -22,7 +22,7 @@ Stack
 
 Build and Run
 =============
-First of all, run `gradle bootjar` to build the project and the java executable will stay on `launcher-app/bin/libs/`, after that you could run teh application with 
+First of all, run `gradle bootjar` to build the project and the java executable will stay on `launcher-app/build/libs`, after that you could run teh application with 
 ```
 java -jar launcher-app/build/libs/launcher-app-1.0-SNAPSHOT.jar -f PATH-LOG-FILE.txt
 ```
