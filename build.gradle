@@ -1,0 +1,93 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE' apply false
+}
+
+ext {
+    version__SpringBoot = '2.1.6.RELEASE'
+    version__HSQLDB = '2.4.1'
+    version__FlyWay = '5.2.4'
+    version__JCommander = '1.72'
+    version__FasterxmlJackson = '2.5.4'
+    version__JUnit = '4.9'
+    version__MockitoCore = '3.0.0'
+    version__LogbackClassic = '1.2.3'
+    version__JCLOverSLF4J = '1.7.26'
+    version__ApacheCommonsLang3 = '3.9'
+    version_HikariCP = '3.3.1'
+    version__RandomBeans = '3.9.0'
+}
+
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+
+    group = 'com.niltonrc'
+    version = '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType( JavaCompile ) {
+        options.encoding = 'UTF-8'
+    }
+
+    javadoc {
+        source = sourceSets.main.allJava
+        classpath = configurations.compileClasspath
+        failOnError = false
+        options {
+            setMemberLevel JavadocMemberLevel.PUBLIC
+            setAuthor true
+        }
+    }
+
+    task sourcesJar( type: Jar, dependsOn: classes ) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar( type: Jar, dependsOn: javadoc ) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    publishing {
+        publications {
+            mavenJava( MavenPublication ) {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+            }
+        }
+    }
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
+    dependencies {
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: version__LogbackClassic
+        compile group: 'org.apache.commons', name: 'commons-lang3', version: version__ApacheCommonsLang3
+//        compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: version__JCLOverSLF4J
+        testCompile group: 'junit', name: 'junit', version: version__JUnit
+    }
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true">
+	<property resource="application.properties" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				%d{dd-MM-yyyy HH:mm:ss.SSS} %highlight([%-5level]) %green(%-30.30logger{0}) %white([%-28.28(%thread:${PID})]) %magenta(:) %white(%m%n)
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      		<pattern>
+				%d{dd-MM-yyyy HH:mm:ss.SSS} [%-5level] %-30.30logger{0} [%-28.28(%thread:${PID})] : %m%n
+      		</pattern>
+		</encoder>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily & on size-->
+			<maxFileSize>10MB</maxFileSize>
+			<fileNamePattern>
+				log/%d{yyyy-MM-dd}_%i.log
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>3GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<logger name="org.springframework" level = "ERROR" />
+	<logger name="com.zaxxer" level = "ERROR" />
+	<logger name="org.hsqldb" level = "ERROR" />
+	<logger name="hsqldb" level = "ERROR" />
+
+	<springProfile name="!only-info">
+		<root level="DEBUG">
+			<appender-ref ref="SAVE-TO-FILE" />
+
+			<springProfile name="stdout">
+				<appender-ref ref="STDOUT" />
+			</springProfile>
+		</root>
+	</springProfile>
+
+	<springProfile name="only-info">
+		<root level="INFO">
+			<appender-ref ref="SAVE-TO-FILE" />
+
+			<springProfile name="stdout">
+				<appender-ref ref="STDOUT" />
+			</springProfile>
+		</root>
+	</springProfile>
+</configuration>

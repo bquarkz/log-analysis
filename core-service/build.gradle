@@ -1,0 +1,11 @@
+dependencies {
+    compile project( ':core-domain' )
+    compile project( ':dbc-adapter' )
+    compile project( ':dbc-persistence' )
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: version__SpringBoot
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: version__FasterxmlJackson
+
+    testCompile group: 'io.github.benas', name: 'random-beans', version: version__RandomBeans
+    testCompile group: 'org.mockito', name: 'mockito-core', version: version__MockitoCore
+}

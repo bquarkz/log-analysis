@@ -1,0 +1,6 @@
+dependencies {
+    compile project( ':dbc-adapter' )
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: version__SpringBoot
+    compile group: 'com.beust', name: 'jcommander', version: version__JCommander
+}

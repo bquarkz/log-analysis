@@ -1,0 +1,10 @@
+dependencies {
+    compile project( ':core-domain' )
+    compile project( ':core-service' )
+    compile project( ':dbc-adapter' )
+    compile project( ':dbc-persistence' )
+    compile project( ':port-persistence' )
+    compile project( ':port-controller' )
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: version__SpringBoot
+}

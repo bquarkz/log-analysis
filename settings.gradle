@@ -1,0 +1,9 @@
+rootProject.name = 'log-analysis'
+
+include 'core-domain'
+include 'core-service'
+include 'dbc-adapter'
+include 'dbc-persistence'
+include 'port-controller'
+include 'port-persistence'
+include 'launcher-app'
