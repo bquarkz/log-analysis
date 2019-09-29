@@ -36,6 +36,8 @@ and if you want to "hide" all debug messages just add `no-debug` on active profi
 java -Dspring.profiles.active=stdout,no-debug -jar launcher-app/build/libs/launcher-app-1.0-SNAPSHOT.jar -f PATH-LOG-FILE.txt
 ```
 
+Database output could be changed as well using `-Ddatabase.output=/path/to/file`, the default one are `./data-sample/log-analysis-db`
+
 Thoughts
 ========
 * we could use Guice or Dagger2 as dependency injection frameworks as well but Spring sounds more relevant 
